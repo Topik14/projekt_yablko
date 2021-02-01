@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta htpp-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <link rel="stylesheet" href="main.css">
+   
+    <title> Vue me </title>
+</head>
+
+<body>
+
+    <div id="app">
+        
+        <transition-group name="dude" tag="ul">
+            
+            <li class="dude" v-for="(dude, index) in characters" :key="index">
+                <a class="ctrl" @click.prevent="remove(dude)">x</a>
+                <article :class="{faded: dude.cool < 10, gold : dude.cool > 50}">
+
+                {{ dude.who }} 
+                <br>
+                    <span>{{ dude.what }}</span>
+
+                </article>
+
+                <input class="ctrl" type="number" v-model.number="dude.cool">
+
+            </li>
+
+        </transition-group>
+       
+
+        <form class="add-new" @keydown.enter = "add">
+            <input type= "text" v-model="newWho" ref="new" autofocus>
+            <br>
+            <input type= "text" v-model="newWhat">
+        </form>
+        
+        <p class="preview">
+            {{newWho}}
+            
+            <small>
+                {{newWhat}} 
+            </small>
+        </p>
+
+
+    </div>
+
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                characters: [{
+
+                    "who": "Lioenel Messi",
+                    "what": "Futbal",
+                    "cool": 12
+                },{
+                    "who": "Lebron James",
+                    "what": "Basketbal",
+                    "cool": 20
+                }],
+                newWho: '',
+                newWhat: '',
+                },
+            methods: {
+                add(){
+                    if(!this.newWho || !this.newWhat ) return
+                    this.characters.push({
+                        who: this.newWho,
+                        what: this.newWhat,
+                        cool: 15
+                    })
+                    this.newWho = ''
+                    this.newWhat = ''
+
+                    this.$refs.new.focus()
+                },
+                remove(dude) {
+                    this.characters = this.characters.filter( item => item !== dude)
+
+                },
+                create(){
+
+                    fetch('')
+                        .then(res => res.hson())
+                        .then(json => this.characters = json)
+                }
+            }
+        })
+
+    </script>
+
+</body>
+</html>
